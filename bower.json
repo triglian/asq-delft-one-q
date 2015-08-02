@@ -1,0 +1,29 @@
+{
+  "name": "asq-delft-one-q",
+  "version": "1.0.0",
+  "authors": [
+    "Vasileios Triglianos <triglian@gmail.com>"
+  ],
+  "description": "Implement with HTML and CSS what you see on the image",
+  "keywords": [
+    "web-component",
+    "polymer",
+    "seed"
+  ],
+  "main": "asq-delft-one-q.html",
+  "license": "MIT",
+  "homepage": "https://github.com/triglian/asq-delft-one-q/",
+  "ignore": [
+    "/.*",
+    "/test/"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.0.0",
+    "iron-flex-layout": "PolymerElements/iron-flex-layout#~1.0.2",
+    "ace-element": "triglian/ace-element#master"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "web-component-tester": "*"
+  }
+}

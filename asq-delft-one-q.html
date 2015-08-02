@@ -1,0 +1,142 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../ace-element/ace-element.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
+
+<!--
+ Give students an image of a simple Web page + the HTML and ask them to write out the CSS to reproduce this image.
+
+### Example:
+
+    <asq-delft-one-q>
+      <asq-stem>
+        <h4>Try to recreate the following image using HTML5 and CSS</h4>
+      <asq-stem>
+      <img src="mockup.png" alt="">
+    </asq-delft-one-q>
+
+@group Seed Elements
+@element asq-delft-one-q
+@demo demo/index.html
+-->
+<dom-module id="asq-delft-one-q">
+
+  <style>
+    :host {
+      @apply(--layout-vertical);
+      min-height:300px;
+      display: block;
+      box-sizing: border-box;
+    }
+
+    #main-content {
+      @apply(--layout-flex);
+      @apply(--layout-horizontal);
+    }
+
+    #html-editor-pane,
+    #css-editor-pane,
+    #result-pane{
+      @apply(--layout-flex);
+      @apply(--layout-vertical);
+      position:relative;
+      border: 1px solid #f0f0f0;
+    }
+
+    #result-iframe{
+       @apply(--layout-flex);
+    }
+
+    .ace-editor{
+      @apply(--layout-flex);
+    }
+
+    .pane-label{
+      position: absolute;
+      color: #888;
+      opacity: 0.8;
+      top: 5px;
+      right: 10px;
+      background: #FFF;
+      border: 1px solid #DDD;
+      padding: 2px 5px;
+      z-index: 1;
+      font-size: 12px;
+    }
+  </style>
+
+
+  <template>
+    <content></content>
+    <div id="main-content">
+      <div id="html-editor-pane">
+        <ace-element id="html-editor" class="ace-editor" theme="textmate" mode="html" on-value-changed="_editorValueChanged"></ace-element>
+        <div class="pane-label">HTML</div>
+      </div>
+      <div id="css-editor-pane">
+        <ace-element id="css-editor" class="ace-editor" theme="textmate" mode="css"></ace-element>
+        <div class="pane-label">CSS</div>
+      </div>
+      <div id="result-pane">
+        <iframe id="result-iframe" src="" frameborder="0"></iframe>
+        <div class="pane-label">Result</div>
+      </div>
+    </div>
+  </template>
+
+</dom-module>
+
+<script>
+
+  Polymer({
+
+    is: 'asq-delft-one-q',
+
+    _baseTemplate: "<!doctype html>\n" +
+          "<html>\n\t" +
+          "<head>\n\t\t" +
+          "<meta charset=\"utf-8\">\n\t\t" +
+          "<title>Test</title>\n\n\t\t\n\t" +
+          "</head>\n\t" +
+          "<body>\n\t\n\t" +
+          "</body>\n" +
+          "</html>",
+
+    attached: function() {
+      var editors = ["html-editor", "css-editor"];
+      editors.forEach(function(editorId){
+        this.$[editorId].addEventListener('editor-input', this._editorValueChanged.bind(this))
+      }.bind(this))
+    },
+
+    _editorValueChanged: function(){
+      this._render();
+    },
+
+    _prepareSource: function() {
+      var html =  this.$["html-editor"].editorValue,
+          css =  this.$["css-editor"].editorValue,
+          src = '';
+
+      // HTML
+      src = this._baseTemplate.replace('</body>', html + '</body>');
+   
+      // CSS
+      css = '<style>' + css + '</style>';
+      src = src.replace('</head>', css + '</head>');
+   
+      return src;
+    },
+
+    _render: function(){
+      var source = this._prepareSource();
+
+      var iframe = this.$["result-iframe"];
+      var iframe_doc = iframe.contentDocument;
+      
+      iframe_doc.open();
+      iframe_doc.write(source);
+      iframe_doc.close();
+    }
+  });
+
+</script>
